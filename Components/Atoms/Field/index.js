@@ -5,7 +5,7 @@ import { AuthContext } from "../../../contexts/AuthContext";
 /* eslint-disable jsx-a11y/label-has-for */
 const Field = ({ placeholder, name, value, type }) => {
   const cssClassnames = classNames(" my-[1rem] relative field", {
-    "field--has-content": value.length > 0,
+    "field--has-content": value ? value.length > 0 : null,
   });
 
   const { handleChange } = useContext(AuthContext);
