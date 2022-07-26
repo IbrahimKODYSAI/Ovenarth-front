@@ -4,7 +4,17 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      keyframes: {
+        showopac: {
+          "0%": { opacity: 0.2 },
+          "30%": { opacity: 0.4 },
+          "50%": { opacity: 0.6 },
+          "80%": { opacity: 0.8 },
+          "10%": { opacity: 1 },
+        },
+      },
+    },
   },
   plugins: [],
 };

@@ -1,4 +1,5 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
+import { useRouter } from "next/router";
 
 import Link from "next/link";
 import Field from "../Components/Atoms/Field";
@@ -7,11 +8,23 @@ import { AuthContext } from "../contexts/AuthContext";
 import { SyncOutlined } from "@ant-design/icons";
 
 const Register = () => {
-  const { inputValues, createUser, loading } = useContext(AuthContext);
+  const router = useRouter();
+  const {
+    inputValues,
+    createUser,
+    loading,
+    firstNameErrMsg,
+    lastNameErrMsg,
+    state,
+  } = useContext(AuthContext);
+  const { username } = state.user;
 
   const { firstName, lastName, userName, email, password, passwordConfirm } =
     inputValues;
 
+  useEffect(() => {
+    if (username !== "") router.push("/");
+  }, [username, router]);
   return (
     <div className="w-[360px] my-[3em] mx-auto">
       <h1 className=" text-5xl font-bold mb-[2rem]">sign Up</h1>
@@ -24,6 +37,7 @@ const Register = () => {
           placeholder="Firstname *"
           type="text"
           value={firstName}
+          errorMsg={firstNameErrMsg}
         />
         <Field
           name="lastName"
@@ -31,6 +45,7 @@ const Register = () => {
           type="text"
           value={lastName}
           textTransform="uppercase"
+          errorMsg={lastNameErrMsg}
         />
         <Field
           name="userName"
@@ -54,7 +69,7 @@ const Register = () => {
       </form>
       <button
         className={`text-lg uppercase h-14 w-full font-bold bg-[#1B1C1D] text-white ${
-          loading ? "cursor-not-allowed" : "cursor-pointer"
+          loading ? "cursor-not-allowed" : ""
         }`}
         type="submit"
         onClick={() => createUser()}

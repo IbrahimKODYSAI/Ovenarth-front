@@ -4,13 +4,16 @@ import "../styles/globals.css";
 import "../styles/field.scss";
 import "react-toastify/dist/ReactToastify.css";
 import { AuthProvider } from "../contexts/AuthContext";
+import { UserProvider } from "../contexts/UserContext";
 
 function MyApp({ Component, pageProps }) {
   return (
     <AuthProvider>
-      <ToastContainer position="top-center" />
-      <Navbar />
-      <Component {...pageProps} />
+      <UserProvider>
+        <ToastContainer position="top-center" />
+        <Navbar />
+        <Component {...pageProps} />
+      </UserProvider>
     </AuthProvider>
   );
 }

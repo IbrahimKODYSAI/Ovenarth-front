@@ -3,17 +3,23 @@ import classNames from "classnames";
 import { AuthContext } from "../../../contexts/AuthContext";
 
 /* eslint-disable jsx-a11y/label-has-for */
-const Field = ({ placeholder, name, value, type }) => {
+const Field = ({ placeholder, name, value, type, errorMsg }) => {
   const cssClassnames = classNames(" my-[1rem] relative field", {
     "field--has-content": value ? value.length > 0 : null,
   });
 
-  const { handleChange } = useContext(AuthContext);
+  const { handleChange, handleErrorMsg } = useContext(AuthContext);
+
+  const onchangeHandler = (event) => {
+    handleChange(event);
+    handleErrorMsg();
+  };
+
   return (
     <div className={cssClassnames}>
       <input
         value={value}
-        onChange={handleChange}
+        onChange={(event) => onchangeHandler(event)}
         id={`field-id-${name}`}
         type={type}
         name={name}
@@ -26,6 +32,7 @@ const Field = ({ placeholder, name, value, type }) => {
       >
         {placeholder}
       </label>
+      <p className=" text-red-700">{errorMsg}</p>
     </div>
   );
 };
