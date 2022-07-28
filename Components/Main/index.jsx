@@ -10,11 +10,12 @@ const Main = () => {
         alt="Woman on computer"
         objectFit="cover"
         objectPosition="bottom"
+        placeholder="blur"
       />
       <div className="absolute bg-white top-12 left-8 p-4 flex flex-col items-satrt justify-center shadow-lg h-40 w-[440px]">
         <h2 className="text-3xl font-bold mb-2">Hello everyone welcome</h2>
         <h3 className="text-xl">Look at this new project !</h3>
-        <h3 className="text-xl">the goal is to learn without stress</h3>
+        <h3 className="text-xl">the goal is to learn without</h3>
       </div>
     </div>
   );

@@ -1,18 +1,16 @@
 import React, { useContext } from "react";
 import classNames from "classnames";
-import { AuthContext } from "../../../contexts/AuthContext";
+import { InstructorContext } from "../../../contexts/InstructorContext";
 
-/* eslint-disable jsx-a11y/label-has-for */
-const Field = ({ placeholder, name, value, type, errorMsg }) => {
+const InstructorField = ({ placeholder, name, value, type }) => {
   const cssClassnames = classNames(" my-[1rem] relative field", {
     "field--has-content": value ? value.length > 0 : null,
   });
 
-  const { handleChange, handleErrorMsg } = useContext(AuthContext);
+  const { handleChange } = useContext(InstructorContext);
 
   const onchangeHandler = (event) => {
     handleChange(event);
-    handleErrorMsg();
   };
 
   return (
@@ -24,7 +22,7 @@ const Field = ({ placeholder, name, value, type, errorMsg }) => {
         type={type}
         name={name}
         placeholder={placeholder}
-        className={`w-full p-4 text-lg h-14 border border-black rounded-[5px] focus:outline-[#82d2dc]`}
+        className={`w-full p-4 text-lg h-14 rounded-[5px] focus:outline-[#82d2dc]`}
       />
       <label
         htmlFor={`field-id-${name}`}
@@ -32,9 +30,8 @@ const Field = ({ placeholder, name, value, type, errorMsg }) => {
       >
         {placeholder}
       </label>
-      <p className=" text-red-700">{errorMsg}</p>
     </div>
   );
 };
 
-export default Field;
+export default InstructorField;
