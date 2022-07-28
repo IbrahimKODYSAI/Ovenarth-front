@@ -2,11 +2,11 @@ import React, { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import Link from "next/link";
-import { AuthContext } from "../contexts/AuthContext";
 
-import img1 from "../public/img/carou1.jpg";
-import UserInfo from "../Components/UserInfo/UserInfo";
-import UserRoute from "../Components/Routes/UserRoute";
+import img1 from "../../public/img/carou1.jpg";
+import UserInfo from "../../Components/UserInfo/UserInfo";
+import UserRoute from "../../Components/Routes/UserRoute";
+import { AuthContext } from "../../contexts/AuthContext";
 
 const Profile = () => {
   const { state, getUserInfo } = useContext(AuthContext);

@@ -5,13 +5,16 @@ import { SyncOutlined } from "@ant-design/icons";
 import { useRouter } from "next/router";
 
 const UserRoute = ({ children }) => {
-  const { getUserInfo, hidden, setHidden } = useContext(AuthContext);
+  const {
+    hidden,
+    state: { user },
+  } = useContext(AuthContext);
 
   const router = useRouter();
 
   useEffect(() => {
-    if (hidden) router.push("/login");
-  }, [hidden, router]);
+    if (user.username === "") router.push("/login");
+  }, [user.username, router]);
 
   return (
     <div>

@@ -5,14 +5,17 @@ import "../styles/field.scss";
 import "react-toastify/dist/ReactToastify.css";
 import { AuthProvider } from "../contexts/AuthContext";
 import { UserProvider } from "../contexts/UserContext";
+import { InstructorProvider } from "../contexts/InstructorContext";
 
 function MyApp({ Component, pageProps }) {
   return (
     <AuthProvider>
       <UserProvider>
-        <ToastContainer position="top-center" />
-        <Navbar />
-        <Component {...pageProps} />
+        <InstructorProvider>
+          <ToastContainer position="top-center" />
+          <Navbar />
+          <Component {...pageProps} />
+        </InstructorProvider>
       </UserProvider>
     </AuthProvider>
   );

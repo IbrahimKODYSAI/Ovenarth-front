@@ -4,7 +4,7 @@ import { AuthContext } from "../../contexts/AuthContext";
 const UserInfo = () => {
   const { state, dispatch, getUserInfo } = useContext(AuthContext);
 
-  const { lastname, firstname, username, email } = state.user;
+  const { lastname, firstname, username, email, role } = state.user;
 
   const [inputValues, setInputValues] = useState({
     newUserName: username,
@@ -325,6 +325,17 @@ const UserInfo = () => {
                 </button>
               </div>
             </form>
+          </div>
+          <div>
+            <li className=" text-left p-2 bg-white my-[10px] rounded-lg duration-300 ease-in-out hover:bg-[#62b3b4] hover:text-white ">
+              <div className=" inline-block min-w-[85px]">
+                <span className=" text-lg font-semibold">Role</span>
+              </div>
+              :{" "}
+              {role && role.includes("Instructor")
+                ? "Content creator"
+                : "Subscribrer"}
+            </li>
           </div>
         </div>
       </ul>

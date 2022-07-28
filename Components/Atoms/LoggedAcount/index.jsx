@@ -31,7 +31,7 @@ const LoggedAccount = () => {
 
         <div className="origin-top-right hidden group-hover:block delay-300 bg-white text-black absolute top-16 right-20 z-50 text-justify border rounded-md p-2">
           <ul className="cursor-pointer">
-            <Link href="/profile">
+            <Link href="/user">
               <a className=" p-2 hover:bg-[#171717] hover:text-white  font-semibold rounded">
                 <UserOutlined className=" align-middle" /> Account
               </a>

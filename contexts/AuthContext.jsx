@@ -71,6 +71,13 @@ export const AuthProvider = (props) => {
     code: "",
     newPassword: "",
     newPasswordConfirm: "",
+    name: "",
+    description: "",
+    price: "",
+    uploading: false,
+    paid: true,
+    loading: false,
+    imagePreview: "",
   });
 
   const handleErrorMsg = () => {

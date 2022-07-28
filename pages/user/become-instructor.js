@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
-
+import { useRouter } from "next/router";
 import { Button } from "antd";
 import {
   SettingOutlined,
@@ -10,9 +10,14 @@ import {
 import { UserContext } from "../../contexts/UserContext";
 
 const BecomeInstructor = () => {
+  const router = useRouter();
   const {
     state: { user },
   } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (user && user.role && user.role.includes("Instructor")) router.push("/");
+  }, [user, router]);
 
   const { becomeInstructor, loading } = useContext(UserContext);
 
@@ -32,7 +37,7 @@ const BecomeInstructor = () => {
               Setup payout to publish courses on OvenArth
             </h2>
             <p className="text-yellow-500 my-8 text-2xl font-semibold">
-              OvenArth partners with stripe to transfer earnins to your bank
+              OvenArth partners with stripe to transfer earning to your bank
               account
             </p>
             <Button

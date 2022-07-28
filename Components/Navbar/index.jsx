@@ -60,11 +60,11 @@ const Navbar = () => {
             {role && role.includes("Instructor") ? (
               <Item
                 label="Create Course"
-                key="/instructor/course/create"
+                key="/instructor"
                 onClick={(e) => setCurrentB(e.key)}
                 icon={<CarryOutOutlined className=" align-middle" />}
               >
-                <Link href="/instructor/course/create">
+                <Link href="/instructor">
                   <a>Create courses</a>
                 </Link>
               </Item>
