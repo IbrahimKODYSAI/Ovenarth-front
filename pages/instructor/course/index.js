@@ -15,7 +15,6 @@ const Course = () => {
   useEffect(() => {
     loadCourses();
   }, []);
-
   return (
     <InstructorRoute>
       <div className="">
@@ -29,27 +28,35 @@ const Course = () => {
             courses.map((course, index) => {
               return (
                 <div key={index} className="block md:flex  mt-4  align-middle">
-                  <Avatar
-                    // shape="square"
-                    size={80}
-                    src={course.image ? course.image.Location : "/course.png"}
-                  />
+                  <Link href={`/instructor/course/view/${course.slug}`}>
+                    <Avatar
+                      // shape="square"
+                      className=" cursor-pointer"
+                      size={80}
+                      src={course.image ? course.image.Location : "/course.png"}
+                    />
+                  </Link>
 
                   <div className="md:mx-5 flex justify-between md:mt-0 w-full  pt-2">
                     <div className=" flex-col justify-between h-max">
                       <Link href={`/instructor/course/view/${course.slug}`}>
                         <a>
-                          <h5 className="text-lg text-blue-600">
-                            {course.name}
-                          </h5>
+                          <div className="flex">
+                            <h5 className="text-lg text-blue-600">
+                              {course.name}
+                            </h5>
+                            <h5 className="text-lg text-black ml-4 font-bold">
+                              {course && course.price === 0
+                                ? "FREE"
+                                : `${course.price} €`}
+                            </h5>
+                          </div>
                         </a>
                       </Link>
-                      <p className="mt-[-8px]">
-                        {course.lessons.length} Lessons
-                      </p>
-                      {course.lessons.length < 5 ? (
+                      <p className="mt-[-8px]">{course.lesson.length} Lesson</p>
+                      {course.lesson.length < 5 ? (
                         <p className="mt-[-5px] text-red-500">
-                          At least 5 lessons are required to publis a course
+                          At least 5 lessons are required to publish a course
                         </p>
                       ) : course.published ? (
                         <p className="mt-[-5px] text-green-500">
