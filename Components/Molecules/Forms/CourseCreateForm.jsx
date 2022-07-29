@@ -4,10 +4,11 @@ import { Select, Avatar, Badge } from "antd";
 import { useRouter } from "next/router";
 import InstructorField from "../../Atoms/Field/InstructorField";
 import { InstructorContext } from "../../../contexts/InstructorContext";
+import { imageConfigDefault } from "next/dist/shared/lib/image-config";
 
 const { Option } = Select;
 
-const CourseCreateForm = () => {
+const CourseCreateForm = (props) => {
   const {
     setInputValues,
     inputValues,
@@ -17,6 +18,9 @@ const CourseCreateForm = () => {
     preview,
     uploadButtonText,
     handleimageRemove,
+    handleimageUpdate,
+    handleUpdateSubmit,
+    image,
   } = useContext(InstructorContext);
   const { name, description, uploading, paid, loading, category, price } =
     inputValues;
@@ -25,6 +29,18 @@ const CourseCreateForm = () => {
   for (let i = 9.99; i <= 100; i++) {
     children.push(<Option key={i.toFixed(2)}>$ {i.toFixed(2)}</Option>);
   }
+  const freeOption = () => {
+    if (paid) {
+      setInputValues({
+        ...inputValues,
+        paid: false,
+        price: 0,
+      });
+    }
+    if (!paid) {
+      setInputValues({ ...inputValues, paid: true, price: "9.99" });
+    }
+  };
 
   return (
     <div>
@@ -35,12 +51,14 @@ const CourseCreateForm = () => {
             placeholder="Name *"
             type="text"
             value={name}
+            onChange={handleChange}
           />
           <InstructorField
             name="category"
             placeholder="Category *"
             type="text"
             value={category}
+            onChange={handleChange}
           />
         </div>
         <div className="my-[1rem]">
@@ -59,13 +77,7 @@ const CourseCreateForm = () => {
             style={{ width: "100%" }}
             value={paid}
             size="large"
-            onChange={(v) =>
-              setInputValues({
-                ...inputValues,
-                paid: inputValues.paid,
-                price: 0,
-              })
-            }
+            onChange={(v) => freeOption()}
           >
             <Option value={true}>Paid</Option>
             <Option value={false}>Free</Option>
@@ -86,7 +98,7 @@ const CourseCreateForm = () => {
         </div>
         <div className="my-[1rem]">
           <div className="relative">
-            <button className="cursor-pointer bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-md text-sm text-center py-2 px-4 inline-flex items-center w-full text-white z-50">
+            <button className="cursor-pointer bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-md text-sm text-center py-3 px-4 inline-flex items-center w-full text-white z-50">
               <svg
                 fill="#FFF"
                 height="18"
@@ -97,7 +109,9 @@ const CourseCreateForm = () => {
                 <path d="M0 0h24v24H0z" fill="none" />
                 <path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z" />
               </svg>
-              <label className="ml-2 cursor-pointer">{uploadButtonText}</label>
+              <label className="ml-2 cursor-pointer overflow-hidden text-justify">
+                {uploadButtonText.slice(0, 45)}...
+              </label>
             </button>
             <input
               className="absolute block h-[37px] w-full top-0 right-0 opacity-0 cursor-pointer"
@@ -109,35 +123,72 @@ const CourseCreateForm = () => {
           </div>
         </div>
         {preview && (
-          <div>
+          <div className="mb-3">
             <Badge
               count="X"
-              onClick={handleimageRemove}
+              onClick={() => handleimageUpdate(props.slug)}
               className=" cursor-pointer"
             >
               <Avatar width={200} src={preview} shape="square" size={64} />
             </Badge>
           </div>
         )}
+        {image && image.length > 0 && props.editPage && !preview && (
+          <div className="mb-3">
+            <Badge
+              count="X"
+              onClick={handleimageRemove}
+              className=" cursor-pointer"
+            >
+              <Avatar
+                width={200}
+                src={image && image.Location}
+                shape="square"
+                size={64}
+              />
+            </Badge>
+          </div>
+        )}
 
-        <button
-          onClick={handleSubmit}
-          disabled={loading || uploading}
-          className={`w-[50%] cursor-pointer text-white  focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm h-12 text-center ${
-            loading
-              ? "bg-gray-500"
-              : "bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br"
-          }`}
-        >
-          {loading ? (
-            <div className="w-full">
-              <SyncOutlined spin className=" align-middle mr-2" />
-              Saving...
-            </div>
-          ) : (
-            "Save & continue"
-          )}
-        </button>
+        {props.editPage ? (
+          <button
+            onClick={() => handleUpdateSubmit(props.slug)}
+            disabled={loading || uploading}
+            className={` w-[50%] cursor-pointer text-white  focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm h-12 text-center ${
+              loading
+                ? "bg-gray-500"
+                : "bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br"
+            }`}
+          >
+            {loading ? (
+              <div className="w-full">
+                <SyncOutlined spin className=" align-middle mr-2" />
+                Saving...
+              </div>
+            ) : (
+              "Update and continue"
+            )}
+          </button>
+        ) : (
+          <button
+            onClick={handleSubmit}
+            disabled={loading || uploading}
+            className={` w-[50%] cursor-pointer text-white  focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm h-12 text-center ${
+              loading
+                ? "bg-gray-500"
+                : "bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br"
+            }`}
+          >
+            {loading ? (
+              <div className="w-full">
+                <SyncOutlined spin className=" align-middle mr-2" />
+                Saving...
+              </div>
+            ) : (
+              "Save and contitue"
+            )}
+          </button>
+        )}
       </form>
     </div>
   );

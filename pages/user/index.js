@@ -11,7 +11,7 @@ import { AuthContext } from "../../contexts/AuthContext";
 const Profile = () => {
   const { state, getUserInfo } = useContext(AuthContext);
 
-  const { role } = state.user;
+  const { role, username } = state.user;
 
   const menuItems = [
     { component: <UserInfo />, title: "Informations" },
@@ -67,6 +67,10 @@ const Profile = () => {
                 />
               </div>
             </div>
+            <h1 className="mx-auto mt-7 w-max   font-bold text-black ml-8 text-[2rem]">
+              Welcome in you dasboard
+              <p className="text-2xl">{username}</p>
+            </h1>
           </div>
           <div className="md:flex md:flex-wrap my-12 mx-auto w-full justify-between">
             <div className="mx-auto w-[300px] md:w-1/5 flex flex-col rounded-lg bg-white h-max">

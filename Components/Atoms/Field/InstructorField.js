@@ -2,15 +2,21 @@ import React, { useContext } from "react";
 import classNames from "classnames";
 import { InstructorContext } from "../../../contexts/InstructorContext";
 
-const InstructorField = ({ placeholder, name, value, type }) => {
+const InstructorField = ({
+  placeholder,
+  name,
+  value,
+  type,
+  border,
+  borderColor,
+  onChange,
+}) => {
   const cssClassnames = classNames(" my-[1rem] relative field", {
     "field--has-content": value ? value.length > 0 : null,
   });
 
-  const { handleChange } = useContext(InstructorContext);
-
   const onchangeHandler = (event) => {
-    handleChange(event);
+    onChange(event);
   };
 
   return (
@@ -22,7 +28,9 @@ const InstructorField = ({ placeholder, name, value, type }) => {
         type={type}
         name={name}
         placeholder={placeholder}
-        className={`w-full p-4 text-lg h-14 rounded-[5px] focus:outline-[#82d2dc]`}
+        className={`w-full p-4 text-lg h-14 rounded-[5px] focus:outline-[#82d2dc] ${
+          border ? "border" : ""
+        } border-[${borderColor}]`}
       />
       <label
         htmlFor={`field-id-${name}`}

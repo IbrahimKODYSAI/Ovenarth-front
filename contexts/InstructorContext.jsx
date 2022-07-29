@@ -40,22 +40,31 @@ export const InstructorProvider = (props) => {
   // state management
 
   const [state, dispatch] = useReducer(rootReducer, initialState);
-  const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState("");
   const [image, setImage] = useState({});
   const [courses, setCourses] = useState([]);
   const [course, setCourse] = useState({});
+  const [video, setVideo] = useState({});
+  const [visible, setVisible] = useState(false);
 
   const [uploadButtonText, setUploadButtonText] = useState("Upload image");
+  const [uploadVideoText, setUploadVideoText] = useState("Upload video");
 
   const [inputValues, setInputValues] = useState({
     name: "",
     category: "",
     description: "",
     price: "9.99",
-    uploading: false,
     paid: true,
+    uploading: false,
     loading: false,
+  });
+  const [inputLessonValues, setInputLessonValue] = useState({
+    title: "",
+    content: "",
+    uploading: false,
+    loading: false,
+    videoProgress: 0,
   });
 
   // Fonctions
@@ -63,6 +72,11 @@ export const InstructorProvider = (props) => {
   const handleChange = (event) => {
     const { name, value } = event.target;
     setInputValues({ ...inputValues, [name]: value });
+  };
+
+  const handleChangeLesson = (event) => {
+    const { name, value } = event.target;
+    setInputLessonValue({ ...inputLessonValues, [name]: value });
   };
 
   const handleImage = (e) => {
@@ -90,6 +104,39 @@ export const InstructorProvider = (props) => {
     }, 1000);
   };
 
+  const handleVideo = async (e) => {
+    setInputLessonValue({ ...inputLessonValues, uploading: true });
+    let file = e.target.files[0];
+
+    setTimeout(async () => {
+      try {
+        setUploadVideoText(file.name);
+
+        const videoData = new FormData();
+        videoData.append("video", file);
+
+        const { data } = await axios.post(
+          `/api/course/video-upload/${course.instructor._id}`,
+          videoData,
+          {
+            onUploadProgress: (e) => {
+              setInputLessonValue({
+                ...inputLessonValues,
+                videoProgress: Math.round((100 * e.loaded) / e.total),
+              });
+            },
+          }
+        );
+        setVideo(data);
+        setInputLessonValue({ ...inputLessonValues, uploading: false });
+      } catch (err) {
+        console.log(err);
+        setInputLessonValue({ ...inputLessonValues, uploading: false });
+        toast("Video upload failed.");
+      }
+    }, 1000);
+  };
+
   const handleimageRemove = async () => {
     setInputValues({ ...inputValues, loading: true });
     setTimeout(async () => {
@@ -107,11 +154,49 @@ export const InstructorProvider = (props) => {
         setInputValues({ ...inputValues, loading: false });
       } catch (err) {
         setInputValues({ ...inputValues, loading: false });
-
+        toast("Image removed.");
         console.log(err);
       }
     }, 1000);
   };
+
+  const handleimageUpdate = async (slug) => {
+    setInputValues({ ...inputValues, loading: true });
+    setTimeout(async () => {
+      try {
+        const res = await axios({
+          method: "POST",
+          url: `/api/course/edit-image/${slug}`,
+          data: {
+            image,
+          },
+        });
+        setImage({});
+        setPreview("");
+        setUploadButtonText("Upload image");
+        setInputValues({ ...inputValues, loading: false });
+      } catch (err) {
+        setInputValues({ ...inputValues, loading: false });
+        toast("Image edit failed.");
+        console.log(err);
+      }
+    }, 1000);
+  };
+  const handleVideoRemove = async () => {
+    try {
+      await axios({
+        method: "POST",
+        url: `/api/course/remove-video/${course.instructor._id}`,
+        data: { video },
+      });
+      setVideo({});
+      setUploadVideoText("Upload Video");
+    } catch (err) {
+      toast("Video removed failed");
+      console.log(err);
+    }
+  };
+  // handleSubmit functions
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -137,13 +222,72 @@ export const InstructorProvider = (props) => {
           paid: true,
           loading: false,
         });
-        router.push("/instructor");
+        setCourse({});
+        router.push("/instructor/course");
       } catch (err) {
         setInputValues({ ...inputValues, loading: false });
         console.log(err);
       }
     }, 1000);
   };
+
+  const handleSubmitLesson = async (slug) => {
+    setInputLessonValue({ ...inputLessonValues, loading: true });
+    setTimeout(async () => {
+      try {
+        const { data } = await axios({
+          method: "POST",
+          url: `/api/course/lesson/${slug}/${course.instructor._id}`,
+          data: {
+            ...inputLessonValues,
+            video,
+          },
+        });
+        setInputLessonValue({ ...inputLessonValues, title: "", content: "" });
+        setVideo({});
+        setVisible(false);
+        setUploadVideoText("Upload video");
+        setCourse(data);
+        toast("Lesson added");
+      } catch (err) {
+        setInputLessonValue({ ...inputLessonValues, loading: false });
+        console.log(err);
+      }
+    }, 1000);
+  };
+
+  const handleUpdateSubmit = async (slug) => {
+    setInputValues({ ...inputValues, loading: true });
+    setTimeout(async () => {
+      try {
+        const { data } = await axios({
+          method: "PUT",
+          url: `/api/course/edit/${slug}`,
+          data: {
+            ...inputValues,
+            image,
+            course,
+          },
+        });
+        toast("Course updated");
+        setInputValues({
+          name: "",
+          category: "",
+          description: "",
+          price: "",
+          uploading: false,
+          paid: true,
+          loading: false,
+        });
+        router.push(`/instructor/course/view/${slug}`);
+      } catch (err) {
+        setInputValues({ ...inputValues, loading: false });
+        console.log(err);
+      }
+    }, 1000);
+  };
+
+  // loading functions
 
   const loadCourses = async () => {
     const { data } = await axios.get("/api//instructor-courses");
@@ -156,7 +300,9 @@ export const InstructorProvider = (props) => {
         method: "GET",
         url: `/api/course/${slug}`,
       });
-      setCourse(data);
+      if (data) setCourse(data);
+      if (data) setInputValues(data);
+      setImage(data.image);
     } catch (err) {
       console.log(err);
     }
@@ -169,7 +315,6 @@ export const InstructorProvider = (props) => {
       value={{
         state,
         dispatch,
-        loading,
         handleChange,
         setInputValues,
         inputValues,
@@ -177,12 +322,24 @@ export const InstructorProvider = (props) => {
         handleSubmit,
         preview,
         uploadButtonText,
+        uploadVideoText,
         handleimageRemove,
         image,
+        video,
         loadCourses,
         courses,
         loadSinglecourse,
         course,
+        handleChangeLesson,
+        inputLessonValues,
+        handleSubmitLesson,
+        handleVideo,
+        handleVideoRemove,
+        handleUpdateSubmit,
+        visible,
+        setVisible,
+        handleimageUpdate,
+        setCourse,
       }}
     >
       {props.children}

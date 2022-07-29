@@ -24,7 +24,7 @@ const Create = () => {
 
   return (
     <InstructorRoute>
-      <div>
+      <div className="m-10">
         <div className="text-center">
           <h1 className="mx-auto w-max text-[2.5rem] mt-8 font-bold text-white">
             Create Course
@@ -33,8 +33,6 @@ const Create = () => {
         <div className="w-[80%] md:w-[450px] mx-auto">
           <CourseCreateForm />
         </div>
-        <pre>{JSON.stringify(inputValues, null, 4)}</pre>
-        <pre>{JSON.stringify(image, null, 4)}</pre>
       </div>
     </InstructorRoute>
   );

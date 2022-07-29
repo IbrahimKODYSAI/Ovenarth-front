@@ -3,10 +3,8 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 
 const menuItems = [
-  { title: "Instructor home", location: "/instructor" },
-  { title: "Create", location: "/instructor/course/create" },
   { title: "Courses", location: "/instructor/course" },
-  { title: "Manage courses", location: "/instructor/course/manage" },
+  { title: "Create", location: "/instructor/course/create" },
 ];
 
 const InstructorNav = () => {

@@ -17,6 +17,10 @@ const InstructorRoute = ({ children }) => {
     fetchInstructor();
   }, []);
 
+  const { state } = useContext(AuthContext);
+
+  const { user } = state;
+
   const fetchInstructor = async () => {
     try {
       const { data } = await axios.get("/api/current-instructor");
@@ -35,8 +39,9 @@ const InstructorRoute = ({ children }) => {
           <div className="m-auto ">
             <div className="relative h-32">
               <div className="absolute z-50 ">
-                <h1 className="mx-auto mt-7 w-max  text-[2.5rem] font-bold text-black ">
-                  Instructor dashboard
+                <h1 className="mx-auto mt-7 w-max   font-bold text-black ml-8 text-[2rem]">
+                  Welcome in you dasboard
+                  <p className="text-2xl">{user.username}</p>
                 </h1>
               </div>
               <button onClick={(e) => handleUpdateAvatar(e)}>ajouter</button>
@@ -54,7 +59,7 @@ const InstructorRoute = ({ children }) => {
           <div className="md:flex md:flex-wrap my-12 mx-auto w-full justify-between">
             <InstructorNav />
 
-            <div className="md:w-3/4 m-auto mt-4 md:mt-0 min-w-[300px] bg-gradient-to-br from-[#B9D9EB] to-[#b4e0d5] rounded-lg p-4">
+            <div className="md:w-3/4 m-auto mt-4 md:mt-0 min-w-[300px] bg-gradient-to-br from-[#B9D9EB] to-[#b4e0d5] rounded-lg p-4 ">
               {children}
             </div>
           </div>
