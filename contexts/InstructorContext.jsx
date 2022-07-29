@@ -222,7 +222,8 @@ export const InstructorProvider = (props) => {
           paid: true,
           loading: false,
         });
-        router.push("/instructor");
+        setCourse({});
+        router.push("/instructor/course");
       } catch (err) {
         setInputValues({ ...inputValues, loading: false });
         console.log(err);
@@ -265,6 +266,7 @@ export const InstructorProvider = (props) => {
           data: {
             ...inputValues,
             image,
+            course,
           },
         });
         toast("Course updated");
@@ -277,7 +279,7 @@ export const InstructorProvider = (props) => {
           paid: true,
           loading: false,
         });
-        router.push("/instructor");
+        router.push(`/instructor/course/view/${slug}`);
       } catch (err) {
         setInputValues({ ...inputValues, loading: false });
         console.log(err);
@@ -298,17 +300,8 @@ export const InstructorProvider = (props) => {
         method: "GET",
         url: `/api/course/${slug}`,
       });
-      setCourse(data);
-      setInputValues({
-        ...inputValues,
-        name: data.name,
-        category: data.category,
-        description: data.description,
-        price: data.price,
-        uploading: data.uploading,
-        paid: data.paid,
-        loading: data.loading,
-      });
+      if (data) setCourse(data);
+      if (data) setInputValues(data);
       setImage(data.image);
     } catch (err) {
       console.log(err);
@@ -346,6 +339,7 @@ export const InstructorProvider = (props) => {
         visible,
         setVisible,
         handleimageUpdate,
+        setCourse,
       }}
     >
       {props.children}

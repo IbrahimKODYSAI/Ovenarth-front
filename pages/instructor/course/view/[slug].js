@@ -27,18 +27,21 @@ const CourseView = () => {
       <div>
         {course && (
           <div>
-            <div className="block md:flex  mt-4  align-middle">
+            <div className="block md:flex  mt-4  align-middle bg-white p-4 rounded-xl hover:bg-blue-400 group font-bold">
               <Avatar
                 // shape="square"
+                className="border-2 border-blue-400 cursor-pointer group-hover:border-black"
                 size={80}
                 src={course.image ? course.image.Location : "/course.png"}
               />
 
               <div className="md:mx-5 flex justify-between md:mt-0 w-full  pt-2">
                 <div className=" flex-col justify-between h-max">
-                  <h5 className="text-lg text-blue-600">{course.name}</h5>
+                  <h5 className="text-lg text-blue-600 group-hover:text-white">
+                    {course.name}
+                  </h5>
 
-                  <p className="mt-[-8px]">
+                  <p className="">
                     {course.lesson && course.lesson.length} Lessons
                   </p>
                   {course.lesson && course.lesson.length < 5 ? (
@@ -56,17 +59,17 @@ const CourseView = () => {
                   )}
                 </div>
 
-                <div className="mt-3 text-center flex space-x-4">
+                <div className="my-3 text-center flex space-x-8 font-bold">
                   <Tooltip title="Edit">
                     <EditOutlined
-                      className=" text-2xl cursor-pointer text-red-500"
+                      className=" text-2xl cursor-pointer text-red-500  bg-blue-300 py-2 px-4 rounded-lg group-hover:bg-white"
                       onClick={() =>
                         router.push(`/instructor/course/edit/${slug}`)
                       }
                     />
                   </Tooltip>
                   <Tooltip title="Publish">
-                    <CheckOutlined className=" text-2xl cursor-pointer text-green-500" />
+                    <CheckOutlined className=" text-2xl cursor-pointer text-green-700  bg-blue-300 py-2 px-4 rounded-lg group-hover:bg-white" />
                   </Tooltip>
                 </div>
               </div>

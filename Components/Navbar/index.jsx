@@ -49,23 +49,23 @@ const Navbar = () => {
         <div className=" w-[280px]">
           <Menu mode="horizontal" selectedKeys={[currentB]}>
             <Menu.Item
-              key="/instructor/course/app"
+              key="/"
               onClick={(e) => setCurrentB(e.key)}
               icon={<AppstoreOutlined className=" align-middle" />}
             >
-              <Link href="/instructor/course/app">
+              <Link href="/">
                 <a>App</a>
               </Link>
             </Menu.Item>
             {role && role.includes("Instructor") ? (
               <Item
                 label="Create Course"
-                key="/instructor"
+                key="/instructor/course"
                 onClick={(e) => setCurrentB(e.key)}
                 icon={<CarryOutOutlined className=" align-middle" />}
               >
-                <Link href="/instructor">
-                  <a>Create courses</a>
+                <Link href="/instructor/course">
+                  <a>Content creator</a>
                 </Link>
               </Item>
             ) : (
